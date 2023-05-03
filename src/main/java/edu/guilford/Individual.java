@@ -4,8 +4,8 @@ public class Individual {
     // Four attributes for name, email, phone, and birthday
     private String name;
     private String email;
-    private String phone;
-    private String birthday;
+    private int phone;
+    private int age;
     private String date;
 
     // Constructor that gives the default data 
@@ -15,16 +15,16 @@ public class Individual {
         // Set the email attribute to "jdoe@guilford"
         email = "";
         // Set the phone attribute to "555-555-5555"
-        phone = "";
+        phone = 555555555;
         // Set the birthday attribute to "01/01/2000"
-        birthday = "";
+        age = 19;
         // Set the date 
         date = "";
 
     }
 
     // Constructor with parameters
-    public Individual(String name, String email, String phone, String birthday) {
+    public Individual(String name, String email, int phone, int age, String date) {
         // Set the name attribute to the name parameter
         this.name = name;
         // Set the email attribute to the email parameter
@@ -32,7 +32,7 @@ public class Individual {
         // Set the phone attribute to the phone parameter
         this.phone = phone;
         // Set the birthday attribute to the birthday parameter
-        this.birthday = birthday;
+        this.age = age;
         // Set the date
         this.date = date;
     }
@@ -63,27 +63,27 @@ public class Individual {
     }
 
     // getter for phone
-    public String getPhone() {
+    public int getPhone() {
         // return the phone attribute
         return phone;
     }
 
     // setter for phone
-    public void setPhone(String phone) {
+    public void setPhone(int phone) {
         // set the phone attribute to the phone parameter
         this.phone = phone;
     }
 
-    // getter for birthday
-    public String getBirthday() {
+    // getter for age
+    public int getAge() {
         // return the birthday attribute
-        return birthday;
+        return age;
     }
 
-    // setter for birthday
-    public void setBirthday(String birthday) {
+    // setter for age
+    public void setAge(int age) {
         // set the birthday attribute to the birthday parameter
-        this.birthday = birthday;
+        this.age = age;
     }
 
     // getter for date
@@ -104,6 +104,6 @@ public class Individual {
     @Override
     public String toString() {
         // return a string with the name, email, phone, and birthday attributes
-        return "Name: " + name + "\nEmail: " + email + "\nPhone: " + phone + "\nBirthday: " + birthday + "\nDate: " + date;
+        return "Name: " + name + "\nEmail: " + email + "\nPhone: " + phone + "\nAge: " + age + "\nDate: " + date;
     }
 }

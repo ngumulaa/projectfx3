@@ -1,15 +1,13 @@
 package edu.guilford;
 
+import java.io.File;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-
-import java.io.File;
-
-import edu.guilford.Individual;
 
 // IndividualPane is a class that extends one of the Pane classes
 public class IndividualPane extends GridPane {
@@ -33,7 +31,7 @@ public class IndividualPane extends GridPane {
     private TextField nameField;
     private TextField emailField;
     private TextField phoneField;
-    private TextField birthdayField;
+    private TextField ageField;
 
     // add a submit button attribute
     private Button submitButton; 
@@ -47,12 +45,17 @@ public class IndividualPane extends GridPane {
      private Label nameLabel;
      private Label emailLabel;
      private Label phoneLabel;
-     private Label birthdayLabel;
+     private Label ageLabel;
      private Label dateLabel; 
 
      // Step 1: Declare an ImageView attribute
     private ImageView imageView;
 
+
+    private boolean valid; // boolean attribute to check if the input is valid
+    private int n; // int attribute to check if the phone number is valid
+    private Label errorLabel; // Label attribute to display error messages
+    private Label stackTraceLabel; // Label attribute to display stack trace
 
 
     // Constructor
@@ -69,7 +72,7 @@ public class IndividualPane extends GridPane {
         // Step 2: Instantiate the ImageView attribute with the image we want to display
         // Get the path of file that contains the image 
         File file = new File(this.getClass().getResource("Miami-Heat-logo.png")
-        .getPath( ));
+        .getPath());
         
         // URI stands for Uniform Resource Identifier and it's similar to a URL
         imageView = new ImageView(file.toURI().toString()); 
@@ -79,21 +82,23 @@ public class IndividualPane extends GridPane {
         nameField = new TextField();
         emailField = new TextField();
         phoneField = new TextField();
-        birthdayField = new TextField();
+        ageField = new TextField();
 
         // instantiate textfield attributes 
         nameField = new TextField();
         emailField = new TextField();
         phoneField = new TextField();
-        birthdayField = new TextField();
+        ageField = new TextField();
 
         // instantiate label attributes
         nameLabel = new Label("Name: " + individual.getName());
         emailLabel = new Label("Email: " + individual.getEmail());
         phoneLabel = new Label("Phone: " + individual.getPhone());
-        birthdayLabel = new Label("Birthday: " + individual.getBirthday());
+        ageLabel = new Label("Age: " + individual.getAge());
         dateLabel = new Label("Date: " + individual.getDate()); 
        
+        errorLabel = new Label();
+        stackTraceLabel = new Label();
     
         // Add a label to the pane
         this.add(nameLabel, 0, 0);
@@ -102,7 +107,7 @@ public class IndividualPane extends GridPane {
         // Add a label to the pane
         this.add(phoneLabel, 0, 2);
         // Add a label to the pane
-        this.add(birthdayLabel, 0, 3);
+        this.add(ageLabel, 0, 3);
         // Add a label to the pane
         this.add(dateLabel, 0, 4);
 
@@ -112,12 +117,18 @@ public class IndividualPane extends GridPane {
         this.add(emailField, 1, 1);
         // Add phoneField to the pane next to the phone label
         this.add(phoneField, 1, 2);
-        // Add birthdayField to the pane next to the birthday label
-        this.add(birthdayField, 1, 3);
+        // Add ageField to the pane next to the age label
+        this.add(ageField, 1, 3);
         // Add the submit button to the pane
         this.add(submitButton, 0, 5);
         // Add the date picker to the pane
         this.add(datePicker, 1, 4);
+
+        // add the error label besides the text fields
+        this.add(errorLabel, 3, 5);
+        // add the stack trace label besides the text fields
+        this.add(stackTraceLabel, 3, 6);
+
 
         // Step 3: Add the ImageView to the pane to the right of the textfields
         this.add(imageView, 2, 0, 1, 4);
@@ -134,6 +145,36 @@ public class IndividualPane extends GridPane {
 
         // Add a listener for the button that changes the labels
         submitButton.setOnAction(e -> {
+            // update the individual attribute with the new data 
+            individual.setName(nameField.getText());
+            individual.setEmail(emailField.getText());
+            // individual.setPhone(Integer.parseInt(phoneField.getText()));  
+            individual.setAge(Integer.parseInt(ageField.getText()));
+
+            try {
+                individual.setPhone(Integer.parseInt(phoneField.getText()));
+                n = individual.getPhone();
+                if (n == 0) {
+                    throw new BadNumberException("Bad Number. Phone cannot be " + n);
+                }
+                valid = true;
+            } catch (NumberFormatException ex) {
+                // put the stack trace in the stackTraceLabel
+                stackTraceLabel.setText(ex.getMessage());
+                // Display the error message in the label
+                errorLabel.setText("Input for age is not an integer ");
+                // flush the errorLabel so that it erases the previous message
+
+            } catch (BadNumberException ex) {
+                // Display the stack trace in the stackTraceLabel
+                stackTraceLabel.setText(ex.getMessage());
+            } if (valid) {
+                errorLabel.setText("");
+                stackTraceLabel.setText("");
+            }
+
+
+            
             // Set the name label to the name field's text
             nameLabel.setText("Name: " + nameField.getText());
             // Set the email label to the email field's text
@@ -141,23 +182,22 @@ public class IndividualPane extends GridPane {
             // Set the phone label to the phone field's text
             phoneLabel.setText("Phone: " + phoneField.getText());
             // Set the birthday label to the birthday field's text
-            birthdayLabel.setText("Birthday: " + birthdayField.getText());
+            ageLabel.setText("Age: " + ageField.getText());
             // Set the date label to the date picker's text
             dateLabel.setText("Date: " + datePicker.getValue());
 
-            // update the individual attribute with the new data 
-            individual.setName(nameField.getText());
-            individual.setEmail(emailField.getText());
-            individual.setPhone(phoneField.getText());
-            individual.setBirthday(birthdayField.getText());
-
             System.out.println(e.toString());
         });
-
-
        
     }
     
-    
+    private static class BadNumberException extends Exception {
+        // All we need in this class is a constructor that tells what is supposed to happen 
+        // when the exception is thrown
+        public BadNumberException(String message) {
+            // our construtor has one parameter: the message we want to send when this exception is thrown
+            super(message);
+        }
+    }
     
 }
