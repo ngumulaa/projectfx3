@@ -39,8 +39,6 @@ public class IndividualPane extends GridPane {
     // add a date picker attribute
     private DatePicker datePicker;
 
-    
-
     // three Label attributes for the name, email, phone,and birthdya
      private Label nameLabel;
      private Label emailLabel;
@@ -56,6 +54,10 @@ public class IndividualPane extends GridPane {
     private int n; // int attribute to check if the phone number is valid
     private Label errorLabel; // Label attribute to display error messages
     private Label stackTraceLabel; // Label attribute to display stack trace
+
+    private boolean valid2;
+    private Label errorLabel2;
+    private Label stackTraceLabel2;
 
 
     // Constructor
@@ -99,6 +101,8 @@ public class IndividualPane extends GridPane {
        
         errorLabel = new Label();
         stackTraceLabel = new Label();
+        errorLabel2 = new Label();
+        stackTraceLabel2 = new Label();
     
         // Add a label to the pane
         this.add(nameLabel, 0, 0);
@@ -128,14 +132,17 @@ public class IndividualPane extends GridPane {
         this.add(errorLabel, 3, 5);
         // add the stack trace label besides the text fields
         this.add(stackTraceLabel, 3, 6);
-
-
-        // Step 3: Add the ImageView to the pane to the right of the textfields
-        this.add(imageView, 2, 0, 1, 4);
+        // // add errorLabel2 beside errorLabel
+        // this.add(errorLabel2, 5, 7);
+        // // add stackTraceLabel2 beside stackTraceLabel
+        // this.add(stackTraceLabel2, 5, 8);
 
         imageView.setFitHeight(100);
         imageView.setPreserveRatio(true);
 
+        // Step 3: Add the ImageView to the bottom right of the pane
+        this.add(imageView, 2, 5);
+        
         // Give the pane a border
         this.setStyle("-fx-border-color: black");
         // make the board thicker
@@ -148,21 +155,20 @@ public class IndividualPane extends GridPane {
             // update the individual attribute with the new data 
             individual.setName(nameField.getText());
             individual.setEmail(emailField.getText());
-            // individual.setPhone(Integer.parseInt(phoneField.getText()));  
-            individual.setAge(Integer.parseInt(ageField.getText()));
+            individual.setPhone(Integer.parseInt(phoneField.getText()));  
 
             try {
-                individual.setPhone(Integer.parseInt(phoneField.getText()));
-                n = individual.getPhone();
+                individual.setAge(Integer.parseInt(ageField.getText()));
+                n = individual.getAge();
                 if (n == 0) {
-                    throw new BadNumberException("Bad Number. Phone cannot be " + n);
+                    throw new BadNumberException("Bad Number. Age cannot be " + n);
                 }
                 valid = true;
             } catch (NumberFormatException ex) {
                 // put the stack trace in the stackTraceLabel
-                stackTraceLabel.setText(ex.getMessage());
+                stackTraceLabel.setText("Please enter an integer for age");
                 // Display the error message in the label
-                errorLabel.setText("Input for age is not an integer ");
+                errorLabel.setText("Incorrect Input for Age ");
                 // flush the errorLabel so that it erases the previous message
 
             } catch (BadNumberException ex) {
@@ -173,20 +179,32 @@ public class IndividualPane extends GridPane {
                 stackTraceLabel.setText("");
             }
 
+            //Write a try-catch block to catch the NoEntryException
+            try {
+                if (nameField.getText().equals("") || emailField.getText().equals("") || 
+                phoneField.getText().equals("") || ageField.getText().equals("") || 
+                dateLabel.getText().equals("")) {
+                    throw new NoEntryException("No Entry. Please enter all fields");
+                }
+                valid2 = true;
+            } catch (NoEntryException ex) {
+                stackTraceLabel2.setText(ex.getMessage());
+                errorLabel2.setText("No Entry ");
+            } if (valid2) {
+                errorLabel2.setText("");
+                stackTraceLabel2.setText("");
+            }
 
-            
             // Set the name label to the name field's text
-            nameLabel.setText("Name: " + nameField.getText());
+            nameLabel.setText("Name: " + individual.getName());
             // Set the email label to the email field's text
-            emailLabel.setText("Email: " + emailField.getText());
+            emailLabel.setText("Email: " + individual.getEmail());
             // Set the phone label to the phone field's text
-            phoneLabel.setText("Phone: " + phoneField.getText());
+            phoneLabel.setText("Phone: " + individual.getPhone());
             // Set the birthday label to the birthday field's text
-            ageLabel.setText("Age: " + ageField.getText());
+            ageLabel.setText("Age: " + individual.getAge());
             // Set the date label to the date picker's text
-            dateLabel.setText("Date: " + datePicker.getValue());
-
-            System.out.println(e.toString());
+            dateLabel.setText("Date: " + individual.getDate());
         });
        
     }
@@ -196,6 +214,12 @@ public class IndividualPane extends GridPane {
         // when the exception is thrown
         public BadNumberException(String message) {
             // our construtor has one parameter: the message we want to send when this exception is thrown
+            super(message);
+        }
+    }
+
+    private static class NoEntryException extends Exception {
+        public NoEntryException(String message) {
             super(message);
         }
     }

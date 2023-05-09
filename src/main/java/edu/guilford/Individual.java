@@ -11,16 +11,15 @@ public class Individual {
     // Constructor that gives the default data 
     public Individual() {
         // Set the name attribute to "John Doe"
-        name = "";
+        name = "John Doe";
         // Set the email attribute to "jdoe@guilford"
-        email = "";
+        email = "jdoe@guilford.edu";
         // Set the phone attribute to "555-555-5555"
         phone = 555555555;
         // Set the birthday attribute to "01/01/2000"
         age = 19;
         // Set the date 
-        date = "";
-
+        date = "12/12/12";
     }
 
     // Constructor with parameters
@@ -97,8 +96,6 @@ public class Individual {
         // set the date attribute to the date parameter
         this.date = date;
     }
-
-
 
     // toString method
     @Override

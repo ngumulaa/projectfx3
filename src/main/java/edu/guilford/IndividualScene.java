@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * JavaFX App
  */
-public class App extends Application {
+public class IndividualScene extends Application {
 
     private static Scene scene;
 
@@ -24,26 +24,16 @@ public class App extends Application {
         // Add a label to the root node
        
         // Instantiate a defualt Individual object 
-        Individual individual = new Individual();
-
+        // Individual individual = new Individual();
 
         // Instantiate anb IndividualPane object and add it to the root node
-        root.getChildren().add(new IndividualPane(individual));
-        scene = new Scene(root, 640, 480);
+        root.getChildren().add(new IndividualPane(new Individual()));
+        scene = new Scene(root, 1100, 700);
         stage.setScene(scene);
         stage.show();
 
         
     }
-
-    // static void setRoot(String fxml) throws IOException {
-    //     scene.setRoot(loadFXML(fxml));
-    // }
-
-    // private static Parent loadFXML(String fxml) throws IOException {
-    //     FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-    //     return fxmlLoader.load();
-    // }
 
     public static void main(String[] args) {
         launch();
